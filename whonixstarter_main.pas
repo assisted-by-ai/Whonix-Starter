@@ -54,9 +54,12 @@ begin
   end;
 
   Process := TProcess.Create(nil);
-  Process.CommandLine := AppConfig.VirtualBoxPath;
-  Process.Execute;
-  Process.Free;
+  try
+    Process.Executable := AppConfig.VirtualBoxPath;
+    Process.Execute;
+  finally
+    Process.Free;
+  end;
 end;
 
 procedure TMainForm.ButtonStartStopClick(Sender: TObject);
@@ -72,26 +75,52 @@ begin
   if (ButtonStartStop.Caption = 'Start Whonix') then
   begin
     ProcessA := TProcess.Create(nil);
-    ProcessA.CommandLine := AppConfig.VBoxManagePath +
-      ' startvm Whonix-Workstation-Xfce';
-    ProcessA.Execute;
+    try
+      ProcessA.Executable := AppConfig.VBoxManagePath;
+      ProcessA.Parameters.Clear;
+      ProcessA.Parameters.Add('startvm');
+      ProcessA.Parameters.Add('Whonix-Workstation-Xfce');
+      ProcessA.Execute;
+    finally
+      ProcessA.Free;
+    end;
     ProcessB := TProcess.Create(nil);
-    ProcessB.CommandLine := AppConfig.VBoxManagePath +
-      ' startvm Whonix-Gateway-Xfce';
-    ProcessB.Execute;
+    try
+      ProcessB.Executable := AppConfig.VBoxManagePath;
+      ProcessB.Parameters.Clear;
+      ProcessB.Parameters.Add('startvm');
+      ProcessB.Parameters.Add('Whonix-Gateway-Xfce');
+      ProcessB.Execute;
+    finally
+      ProcessB.Free;
+    end;
     ButtonStartStop.Caption := 'Stop Whonix';
   end
   else
   if (ButtonStartStop.Caption = 'Stop Whonix') then
   begin
     ProcessA := TProcess.Create(nil);
-    ProcessA.CommandLine := AppConfig.VBoxManagePath +
-      ' controlvm Whonix-Workstation-Xfce poweroff';
-    ProcessA.Execute;
+    try
+      ProcessA.Executable := AppConfig.VBoxManagePath;
+      ProcessA.Parameters.Clear;
+      ProcessA.Parameters.Add('controlvm');
+      ProcessA.Parameters.Add('Whonix-Workstation-Xfce');
+      ProcessA.Parameters.Add('poweroff');
+      ProcessA.Execute;
+    finally
+      ProcessA.Free;
+    end;
     ProcessB := TProcess.Create(nil);
-    ProcessB.CommandLine := AppConfig.VBoxManagePath +
-      ' controlvm Whonix-Gateway-Xfce poweroff';
-    ProcessB.Execute;
+    try
+      ProcessB.Executable := AppConfig.VBoxManagePath;
+      ProcessB.Parameters.Clear;
+      ProcessB.Parameters.Add('controlvm');
+      ProcessB.Parameters.Add('Whonix-Gateway-Xfce');
+      ProcessB.Parameters.Add('poweroff');
+      ProcessB.Execute;
+    finally
+      ProcessB.Free;
+    end;
     ButtonStartStop.Caption := 'Start Whonix';
   end;
 end;
